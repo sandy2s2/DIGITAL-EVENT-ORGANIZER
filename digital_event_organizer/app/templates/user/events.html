@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Events - Digital Event Organizer{% endblock %}
+{% block content %}
+<div class="container">
+    <h2 class="mb-4"><i class="bi bi-calendar-check"></i> Browse Events</h2>
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <form action="{{ url_for('user.events') }}" method="GET" class="d-flex">
+                <input type="text" name="search" class="form-control me-2" placeholder="Search events..." value="{{ search or '' }}">
+                <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i> Search</button>
+            </form>
+        </div>
+        <div class="col-md-4">
+            <select class="form-select" onchange="window.location.href='{{ url_for('user.events') }}?category=' + this.value">
+                <option value="">All Categories</option>
+                <option value="Technology" {% if category == 'Technology' %}selected{% endif %}>Technology</option>
+                <option value="Workshop" {% if category == 'Workshop' %}selected{% endif %}>Workshop</option>
+                <option value="Cultural" {% if category == 'Cultural' %}selected{% endif %}>Cultural</option>
+                <option value="Sports" {% if category == 'Sports' %}selected{% endif %}>Sports</option>
+                <option value="Seminar" {% if category == 'Seminar' %}selected{% endif %}>Seminar</option>
+            </select>
+        </div>
+    </div>
+    {% if events %}
+        <div class="row">
+            {% for event in events %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ event.title }}</h5>
+                        <p class="card-text">{{ event.description[:100] }}...</p>
+                        <p class="mb-1"><i class="bi bi-calendar3"></i> {{ event.event_date }}</p>
+                        <p class="mb-1"><i class="bi bi-clock"></i> {{ event.event_time }}</p>
+                        <p class="mb-1"><i class="bi bi-geo-alt"></i> {{ event.venue }}</p>
+                        <p class="mb-1"><i class="bi bi-tag"></i> {{ event.category }}</p>
+                        {% if event.is_paid %}
+                            <p class="mb-1"><strong><i class="bi bi-currency-rupee"></i> {{ event.price }}</strong></p>
+                        {% else %}
+                            <p class="mb-1"><span class="badge bg-success">Free Event</span></p>
+                        {% endif %}
+                        <p class="mb-1"><small>Available Seats: {{ event.max_participants - event.current_participants }}</small></p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="{{ url_for('user.event_details', event_id=event.event_id) }}" class="btn btn-primary btn-sm w-100">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">No events found.</div>
+    {% endif %}
+</div>
+{% endblock %}

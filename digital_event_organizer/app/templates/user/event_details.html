@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}{{ event.title }} - Event Details{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">{{ event.title }}</h3>
+                </div>
+                <div class="card-body">
+                    <p class="lead">{{ event.description }}</p>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><i class="bi bi-calendar3"></i> <strong>Date:</strong> {{ event.event_date }}</p>
+                            <p><i class="bi bi-clock"></i> <strong>Time:</strong> {{ event.event_time }}</p>
+                            <p><i class="bi bi-geo-alt"></i> <strong>Venue:</strong> {{ event.venue }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><i class="bi bi-tag"></i> <strong>Category:</strong> {{ event.category }}</p>
+                            <p><i class="bi bi-people"></i> <strong>Max Participants:</strong> {{ event.max_participants }}</p>
+                            <p><i class="bi bi-check-circle"></i> <strong>Available Seats:</strong> {{ event.max_participants - event.current_participants }}</p>
+                        </div>
+                    </div>
+                    {% if event.registration_deadline %}
+                    <p><i class="bi bi-calendar-x"></i> <strong>Registration Deadline:</strong> {{ event.registration_deadline }}</p>
+                    {% endif %}
+                    {% if event.is_paid %}
+                    <div class="alert alert-warning">
+                        <i class="bi bi-currency-rupee"></i> <strong>Registration Fee:</strong> ₹{{ event.price }}
+                    </div>
+                    {% else %}
+                    <div class="alert alert-success">
+                        <i class="bi bi-check-circle"></i> This is a <strong>FREE</strong> event!
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Registration</h5>
+                </div>
+                <div class="card-body">
+                    {% if session.user_id %}
+                        {% if is_registered %}
+                            <div class="alert alert-info">
+                                <i class="bi bi-check-circle"></i> You are already registered for this event!
+                            </div>
+                            <a href="{{ url_for('user.my_registrations') }}" class="btn btn-primary w-100">
+                                View My Registrations
+                            </a>
+                        {% elif (event.max_participants - event.current_participants) <= 0 %}
+                            <div class="alert alert-danger">
+                                <i class="bi bi-x-circle"></i> Event is full!
+                            </div>
+                        {% else %}
+                            <form method="POST" action="{{ url_for('user.register_event', event_id=event.event_id) }}">
+                                <button type="submit" class="btn btn-success w-100 mb-2">
+                                    <i class="bi bi-check-circle"></i> Register Now
+                                </button>
+                            </form>
+                            <p class="text-muted small">Seats remaining: {{ event.max_participants - event.current_participants }}</p>
+                        {% endif %}
+                    {% else %}
+                        <div class="alert alert-warning">
+                            Please <a href="{{ url_for('user.login') }}">login</a> to register
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Edit Event{% endblock %}
+{% block content %}
+<div class="container">
+    <h2 class="mb-4"><i class="bi bi-pencil"></i> Edit Event</h2>
+    <div class="card shadow">
+        <div class="card-body">
+            <form method="POST">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Event Title</label>
+                        <input type="text" name="title" class="form-control" value="{{ event.title }}" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Category</label>
+                        <select name="category" class="form-select" required>
+                            <option value="Technology" {% if event.category == 'Technology' %}selected{% endif %}>Technology</option>
+                            <option value="Workshop" {% if event.category == 'Workshop' %}selected{% endif %}>Workshop</option>
+                            <option value="Cultural" {% if event.category == 'Cultural' %}selected{% endif %}>Cultural</option>
+                            <option value="Sports" {% if event.category == 'Sports' %}selected{% endif %}>Sports</option>
+                            <option value="Seminar" {% if event.category == 'Seminar' %}selected{% endif %}>Seminar</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <textarea name="description" class="form-control" rows="4" required>{{ event.description }}</textarea>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Event Date</label>
+                        <input type="date" name="event_date" class="form-control" value="{{ event.event_date }}" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Event Time</label>
+                        <input type="time" name="event_time" class="form-control" value="{{ event.event_time }}" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Max Participants</label>
+                        <input type="number" name="max_participants" class="form-control" value="{{ event.max_participants }}" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Venue</label>
+                    <input type="text" name="venue" class="form-control" value="{{ event.venue }}" required>
+                </div>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a href="{{ url_for('admin.manage_events') }}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Update Event</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

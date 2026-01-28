@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Create Event{% endblock %}
+{% block content %}
+<div class="container">
+    <h2 class="mb-4"><i class="bi bi-plus-circle"></i> Create New Event</h2>
+    <div class="card shadow">
+        <div class="card-body">
+            <form method="POST">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Event Title</label>
+                        <input type="text" name="title" class="form-control" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Category</label>
+                        <select name="category" class="form-select" required>
+                            <option value="">Select Category</option>
+                            <option value="Technology">Technology</option>
+                            <option value="Workshop">Workshop</option>
+                            <option value="Cultural">Cultural</option>
+                            <option value="Sports">Sports</option>
+                            <option value="Seminar">Seminar</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <textarea name="description" class="form-control" rows="4" required></textarea>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Event Date</label>
+                        <input type="date" name="event_date" class="form-control" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Event Time</label>
+                        <input type="time" name="event_time" class="form-control" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Registration Deadline</label>
+                        <input type="date" name="registration_deadline" class="form-control">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Venue</label>
+                    <input type="text" name="venue" class="form-control" required>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Max Participants</label>
+                        <input type="number" name="max_participants" class="form-control" value="100" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Is Paid Event?</label>
+                        <select name="is_paid" class="form-select" id="isPaid" onchange="togglePrice()">
+                            <option value="false">No (Free Event)</option>
+                            <option value="true">Yes (Paid Event)</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3" id="priceDiv" style="display:none;">
+                        <label class="form-label">Price (₹)</label>
+                        <input type="number" name="price" class="form-control" step="0.01" value="0">
+                    </div>
+                </div>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a href="{{ url_for('admin.manage_events') }}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-success">Create Event</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+function togglePrice() {
+    var isPaid = document.getElementById('isPaid').value;
+    var priceDiv = document.getElementById('priceDiv');
+    priceDiv.style.display = isPaid === 'true' ? 'block' : 'none';
+}
+</script>
+{% endblock %}
